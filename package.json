@@ -21,5 +21,18 @@
   "bugs": {
     "url": "https://github.com/entozoon/azure-compiler/issues"
   },
-  "homepage": "https://github.com/entozoon/azure-compiler#readme"
+  "homepage": "https://github.com/entozoon/azure-compiler#readme",
+  "dependencies": {
+    "cli-clear": "^1.0.4",
+    "colors": "^1.1.2",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-concat": "^2.6.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-watch": "^4.3.10",
+    "inquirer": "^1.2.2"
+  }
 }
