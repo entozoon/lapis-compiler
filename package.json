@@ -1,0 +1,25 @@
+{
+  "name": "azure-compiler",
+  "version": "1.0.0",
+  "description": "Gulp Sass Javascript Compiler",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/entozoon/azure-compiler.git"
+  },
+  "keywords": [
+    "gulp",
+    "sass",
+    "javascript",
+    "compile"
+  ],
+  "author": "Michael Cook <entozoon@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/entozoon/azure-compiler/issues"
+  },
+  "homepage": "https://github.com/entozoon/azure-compiler#readme"
+}
