@@ -1,6 +1,6 @@
 {
   "name": "azure-compiler",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Gulp Sass Javascript Compiler",
   "main": "gulpfile.js",
   "scripts": {

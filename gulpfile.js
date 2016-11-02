@@ -73,7 +73,7 @@ gulp.task('modes', () => {
 					'minify': true,
 					'sassStyle': 'compressed',
 					'sourcemaps': false,
-					'browserSync': false
+					'browserSync': true
 				}
 			}
 		],
@@ -176,18 +176,20 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	if (modes.browserSync) {
 		if (azureconfig.browserSyncProxy == null) {
 			echoFill(' Warning', 'red', 'white', 'bold');
-			console.log(' Browser sync requires a proxy url, please add something similar to your azureconfig.json');
+			console.log(' Browser sync requires a proxy url, please add something similar to your azureconfig.json:');
 			console.log('"browserSyncProxy": "sitename.dev"');
-			let watches = override(azureconfig.css.watch, azureconfig.js.watch, true);
-			browserSync.init({
-				proxy: browserSyncProxy,
-				open: 'local',
-				files: watches,
-				logPrefix: "Browser-sync",
-				//injectChanges: false // Don't try to inject, just do a page refresh
-			});
+			return false;
 		}
 	}
+
+	let watches = override(azureconfig.css.watch, azureconfig.js.watch, true);
+	browserSync.init({
+		proxy: azureconfig.browserSyncProxy,
+		open: 'local',
+		files: watches,
+		logPrefix: "Browser-sync",
+		//injectChanges: false // Don't try to inject, just do a page refresh
+	});
 
 	echoFill('', 'green', 'white', 'bold');
 	echoFill(' Ready!', 'green', 'white', 'bold');
