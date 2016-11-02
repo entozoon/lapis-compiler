@@ -1,12 +1,13 @@
 {
 	"css": {
-		"from": "../../../",
+		"from": "../../",
 		"watch": [
 			"src/scss/**/*.css",
 			"src/scss/**/*.scss"
 		],
-		"src": "src/scss/app.css",
-		"dest": "build"
+		"src": "src/scss/app.scss",
+		"dest": "./build/css",
+		"filename": "app.css"
 	},
 	"js": {
 		"from": "../../../",
@@ -14,6 +15,7 @@
 			"src/js/**/*.js"
 		],
 		"src": "src/js/app.js",
-		"dest": "build"
+		"dest": "build/js",
+		"filename": "app.js"
 	}
 }

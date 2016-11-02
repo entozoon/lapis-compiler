@@ -11,5 +11,4 @@ A flexible frontend compiler.
 ## Runnivisation
 Navigate to node_modules/azure-compiler/ and run:
 
-	npm install
-	gulp
+	gulp --silent
