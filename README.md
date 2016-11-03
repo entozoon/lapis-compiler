@@ -1,12 +1,15 @@
 # Azure Gulp Sass Javascript Compiler
 A flexible frontend compiler.
 
-## Installation
+## Installification
 	yarn add azure-compiler
 
-## Alternatively
+#### Or, alternatifully
+
 	npm install --save azure-compiler
 
+## Runnivisation
 Navigate to node_modules/azure-compiler/ and run:
+
 	npm install
 	gulp
