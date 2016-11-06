@@ -124,7 +124,7 @@ gulp.task('css', () => {
 			imports: true
 		}))
 
-		// Minify the CSS if in production
+		// Minify
 		.pipe(modes.minify ? cleanCss({
 			advanced: false,
 			roundingPrecision: 4,
@@ -147,7 +147,7 @@ gulp.task('css', () => {
 		//console.log(process.cwd() + '/' + lapisconfig.css.dest + '/' + lapisconfig.css.filename);
 		css.pipe(gulp.dest(lapisconfig.css.dest));
 	} else {
-		for (var i = 0; i<lapisconfig.css.dest.length; i++) {
+		for (var i = 0; i < lapisconfig.css.dest.length; i++) {
 			css.pipe(gulp.dest(lapisconfig.css.dest[i]));
 		}
 	}
@@ -176,17 +176,38 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	 * Check for user defined browser sync proxy, or it'll nae work
 	 */
 	if (modes.browserSync) {
-		if (lapisconfig.browserSyncProxy == null) {
+		if (lapisconfig.browserSync == null ||
+			lapisconfig.browserSync.proxy == null) {
 			echoFill(' Warning', 'red', 'white', 'bold');
-			console.log(' Browser sync requires a proxy url, please add something similar to your lapisconfig.json:');
-			console.log('"browserSyncProxy": "sitename.dev"');
+			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
+			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
 			return false;
 		}
 	}
 
-	let watches = override(lapisconfig.css.watch, lapisconfig.js.watch, true);
+	/**
+	 * Watches array for browserSync
+	 * Combine given dest/filename values for css, js plus browserSync watch as extras.
+	 */
+	let watches = [];
+	if (lapisconfig.css.dest != null &&
+		lapisconfig.css.filename != null) {
+		watches = watches.concat(lapisconfig.css.dest + '/' + lapisconfig.css.filename);
+	}
+	if (lapisconfig.js.watch != null &&
+		lapisconfig.js.filename != null) {
+		watches = watches.concat(lapisconfig.js.dest + '/' +  lapisconfig.js.filename);
+	}
+	if (modes.browserSync &&
+		lapisconfig.browserSync != null &&
+		lapisconfig.browserSync.watch != null) {
+		watches = watches.concat(lapisconfig.browserSync.watch);
+	}
+
+	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
+	console.log(watches);
 	browserSync.init({
-		proxy: lapisconfig.browserSyncProxy,
+		proxy: lapisconfig.browserSync.proxy,
 		open: 'local',
 		files: watches,
 		logPrefix: "Browser-sync",
