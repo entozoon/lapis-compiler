@@ -1,5 +1,5 @@
 {
-  "name": "azure-compiler",
+  "name": "lapis-compiler",
   "version": "1.1.0",
   "description": "Gulp Sass Javascript Compiler",
   "main": "gulpfile.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/entozoon/azure-compiler.git"
+    "url": "git+https://github.com/entozoon/lapis-compiler.git"
   },
   "keywords": [
     "gulp",
@@ -19,9 +19,9 @@
   "author": "Michael Cook <entozoon@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/entozoon/azure-compiler/issues"
+    "url": "https://github.com/entozoon/lapis-compiler/issues"
   },
-  "homepage": "https://github.com/entozoon/azure-compiler#readme",
+  "homepage": "https://github.com/entozoon/lapis-compiler#readme",
   "dependencies": {
     "browser-sync": "^2.17.5",
     "cli-clear": "^1.0.4",

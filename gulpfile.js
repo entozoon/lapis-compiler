@@ -1,5 +1,7 @@
 //
-// Azure Compiler. Gulp it down good sonny! Yeah, you like that don't you.
+// Lapis Compiler
+// Gulp it down good sonny! Yeah, you like that don't you.
+// gulp --silent
 //
 var gulp         = require('gulp'),
 	clear        = require('cli-clear'),
@@ -21,7 +23,7 @@ var gulp         = require('gulp'),
 	size         = require('gulp-size'),
 	override     = require('json-override'),
 	fs           = require('fs'),
-	azureconfig  = require('./azureconfig.json');
+	lapisconfig  = require('./lapisconfig.json');
 
 /**
  * Default modes, overrided by modes select
@@ -33,15 +35,15 @@ let modes = {
 	'browserSync': false
 };
 
-let hasOverridenAzureConfig = false;
-overrideAzureConfig();
+let hasOverridenLapisConfig = false;
+overrideLapisConfig();
 
 /**
  * Intro
  */
 clear();
 echoFill('', 'cyan', 'white', 'bold');
-echoFill(' Azure Compiler', 'cyan', 'white', 'bold');
+echoFill(' Lapis Compiler', 'cyan', 'white', 'bold');
 echoFill('', 'cyan', 'white', 'bold');
 console.log('');
 
@@ -83,8 +85,8 @@ gulp.task('modes', () => {
 	return inquirer.prompt(question).then(answer => {
 		modes = override(modes, answer.modes, true);
 
-		if (hasOverridenAzureConfig) {
-			echoFill(" Found azureconfig.json", 'blue', 'white', 'bold');
+		if (hasOverridenLapisConfig) {
+			echoFill(" Found lapisconfig.json", 'blue', 'white', 'bold');
 		}
 		echoFill(' Running compiler from:', 'cyan', 'white', 'bold');
 		console.log(' ' + process.cwd());
@@ -96,7 +98,7 @@ gulp.task('modes', () => {
  */
 gulp.task('css', () => {
 	echoFill(" Event", 'blue', 'white', 'bold');
-	var css = gulp.src(azureconfig.css.src)
+	var css = gulp.src(lapisconfig.css.src)
 		// Sourcemaps init
 		.pipe(modes.sourcemaps ? sourcemaps.init() : gutil.noop())
 
@@ -109,7 +111,7 @@ gulp.task('css', () => {
 			.on('error', sass.logError))
 
 		// Concat to filename
-		.pipe(concat(azureconfig.css.filename))
+		.pipe(concat(lapisconfig.css.filename))
 
 		// Autoprefixer
 		.pipe(autoprefixer({
@@ -141,12 +143,12 @@ gulp.task('css', () => {
 		}));
 
 	// Save compiled file to each destination, whether single string or array
-	if (typeof azureconfig.css.dest === 'string') {
-		//console.log(process.cwd() + '/' + azureconfig.css.dest + '/' + azureconfig.css.filename);
-		css.pipe(gulp.dest(azureconfig.css.dest));
+	if (typeof lapisconfig.css.dest === 'string') {
+		//console.log(process.cwd() + '/' + lapisconfig.css.dest + '/' + lapisconfig.css.filename);
+		css.pipe(gulp.dest(lapisconfig.css.dest));
 	} else {
-		for (var i = 0; i<azureconfig.css.dest.length; i++) {
-			css.pipe(gulp.dest(azureconfig.css.dest[i]));
+		for (var i = 0; i<lapisconfig.css.dest.length; i++) {
+			css.pipe(gulp.dest(lapisconfig.css.dest[i]));
 		}
 	}
 });
@@ -158,7 +160,7 @@ gulp.task('css', () => {
  */
 
 gulp.task('js', ['modes'], () => {
-	console.log(azureconfig.js);
+	console.log(lapisconfig.js);
 });
 
 /**
@@ -166,7 +168,7 @@ gulp.task('js', ['modes'], () => {
  */
 gulp.task('nowMyWatchBegins', ['modes'], () => {
 	echoFill(' Config:', 'cyan', 'white', 'bold');
-	console.log(azureconfig.css);
+	console.log(lapisconfig.css);
 	echoFill(' Modes:', 'cyan', 'white', 'bold');
 	console.log(modes);
 
@@ -174,17 +176,17 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	 * Check for user defined browser sync proxy, or it'll nae work
 	 */
 	if (modes.browserSync) {
-		if (azureconfig.browserSyncProxy == null) {
+		if (lapisconfig.browserSyncProxy == null) {
 			echoFill(' Warning', 'red', 'white', 'bold');
-			console.log(' Browser sync requires a proxy url, please add something similar to your azureconfig.json:');
+			console.log(' Browser sync requires a proxy url, please add something similar to your lapisconfig.json:');
 			console.log('"browserSyncProxy": "sitename.dev"');
 			return false;
 		}
 	}
 
-	let watches = override(azureconfig.css.watch, azureconfig.js.watch, true);
+	let watches = override(lapisconfig.css.watch, lapisconfig.js.watch, true);
 	browserSync.init({
-		proxy: azureconfig.browserSyncProxy,
+		proxy: lapisconfig.browserSyncProxy,
 		open: 'local',
 		files: watches,
 		logPrefix: "Browser-sync",
@@ -195,7 +197,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	echoFill(' Ready!', 'green', 'white', 'bold');
 	echoFill('', 'green', 'white', 'bold');
 
-	gulp.watch(azureconfig.css.watch, ['css']);
+	gulp.watch(lapisconfig.css.watch, ['css']);
 	//gulp.watch('./src/js/**/*.js', ['js']);
 });
 
@@ -209,23 +211,23 @@ gulp.task('default', [
 
 
 /**
- * Load azureconfig.json overrides file if exists in same directory as package.json
+ * Load lapisconfig.json overrides file if exists in same directory as package.json
  *
  * Runs asynchronously but that should be okay.
  */
- //const azureConfig = () => {
-function overrideAzureConfig() {
-	fs.stat('../../azureconfig.json', function(err, stat) {
+ //const lapisConfig = () => {
+function overrideLapisConfig() {
+	fs.stat('../../lapisconfig.json', function(err, stat) {
 		if (err == null) {
-			var azureconfigOverrides = require('../../azureconfig.json');
-			azureconfig = override(azureconfig, azureconfigOverrides, true);
-			hasOverridenAzureConfig = true;
+			var lapisconfigOverrides = require('../../lapisconfig.json');
+			lapisconfig = override(lapisconfig, lapisconfigOverrides, true);
+			hasOverridenLapisConfig = true;
 		} else {
-			// Use default azureconfig.json
-			hasOverridenAzureConfig = false;
+			// Use default lapisconfig.json
+			hasOverridenLapisConfig = false;
 		}
 		// Change to given directory
-		process.chdir(azureconfig.css.from);
+		process.chdir(lapisconfig.css.from);
 	});
 	return null;
 }

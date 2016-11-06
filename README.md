@@ -1,13 +1,13 @@
-# Azure Gulp Sass Javascript Compiler
+# Lapis Gulp Sass Javascript Compiler
 A flexible frontend compiler.
 
 ## Installification
-	yarn add azure-compiler
+	yarn add lapis-compiler
 
 #### Or, alternatifully
 
-	npm install --save azure-compiler
+	npm install --save lapis-compiler
 
 ## Runnivisation
-	cd node_modules/azure-compiler
+	cd node_modules/lapis-compiler
 	gulp --silent
