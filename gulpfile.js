@@ -158,8 +158,7 @@ gulp.task('css', () => {
  *
  * 'js' runs when 'modes' is completed
  */
-
-gulp.task('js', ['modes'], () => {
+gulp.task('js', () => {
 	console.log(lapisconfig.js);
 });
 
@@ -176,8 +175,8 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	 * Check for user defined browser sync proxy, or it'll nae work
 	 */
 	if (modes.browserSync) {
-		if (lapisconfig.browserSync == null ||
-			lapisconfig.browserSync.proxy == null) {
+		if (lapisconfig.browserSync === undefined ||
+			lapisconfig.browserSync.proxy === undefined) {
 			echoFill(' Warning', 'red', 'white', 'bold');
 			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
 			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
@@ -190,17 +189,17 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	 * Combine given dest/filename values for css, js plus browserSync watch as extras.
 	 */
 	let watches = [];
-	if (lapisconfig.css.dest != null &&
-		lapisconfig.css.filename != null) {
+	if (lapisconfig.css.dest !== undefined &&
+		lapisconfig.css.filename !== undefined) {
 		watches = watches.concat(lapisconfig.css.dest + '/' + lapisconfig.css.filename);
 	}
-	if (lapisconfig.js.watch != null &&
-		lapisconfig.js.filename != null) {
+	if (lapisconfig.js.watch !== undefined &&
+		lapisconfig.js.filename !== undefined) {
 		watches = watches.concat(lapisconfig.js.dest + '/' +  lapisconfig.js.filename);
 	}
 	if (modes.browserSync &&
-		lapisconfig.browserSync != null &&
-		lapisconfig.browserSync.watch != null) {
+		lapisconfig.browserSync !== undefined &&
+		lapisconfig.browserSync.watch !== undefined) {
 		watches = watches.concat(lapisconfig.browserSync.watch);
 	}
 
@@ -219,7 +218,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	echoFill('', 'green', 'white', 'bold');
 
 	gulp.watch(lapisconfig.css.watch, ['css']);
-	//gulp.watch('./src/js/**/*.js', ['js']);
+	gulp.watch(lapisconfig.js.watch, ['js']);
 });
 
 /**
@@ -239,7 +238,7 @@ gulp.task('default', [
  //const lapisConfig = () => {
 function overrideLapisConfig() {
 	fs.stat('../../lapisconfig.json', function(err, stat) {
-		if (err == null) {
+		if (err === undefined) {
 			var lapisconfigOverrides = require('../../lapisconfig.json');
 			lapisconfig = override(lapisconfig, lapisconfigOverrides, true);
 			hasOverridenLapisConfig = true;
@@ -259,7 +258,7 @@ function overrideLapisConfig() {
  * (Move to its own npm module when everything is ironed out)
  */
 function echoFill(string, bg, fg, bold) {
-	if (typeof bold == 'undefined') {
+	if (bold === undefined) {
 		bold = false;
 	} else {
 		bold = true;
@@ -278,7 +277,7 @@ function echoFill(string, bg, fg, bold) {
 
 // Nice things are nice.
 function fillColumns(string) {
-	if (typeof string == 'undefined') string = '';
+	if (string === undefined) string = '';
 
 	var columnCoverage = process.stdout.columns;
 	while (columnCoverage < string.length) {
