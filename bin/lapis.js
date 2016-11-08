@@ -1,12 +1,6 @@
 #! /usr/bin/env node
-/*
-var shell = require('shelljs');
-
-shell.exec('echo Starting Lapis Compiler..');
-shell.exec('gulp --silent');
-*/
-
-var exec = require('child_process').exec;
-
-exec('echo Starting Lapis Compiler..', function(error, stdout, stderr) {});
-exec('gulp --silent', function(error, stdout, stderr) {});
+var child_process = require('child_process');
+console.log('Starting Lapis Compiler..');
+child_process.execSync('gulp --silent', {
+	stdio: 'inherit'
+});
