@@ -1,4 +1,6 @@
 {
-	"esversion": 6,
-	"indent": 4
+    "esversion": 6,
+	"indent": 4,
+    "strict": false,
+    "node": true
 }

@@ -1,29 +1,38 @@
 //
 // Lapis Compiler
-// Gulp it down good sonny! Yeah, you like that don't you.
-// gulp --silent
 //
-var gulp         = require('gulp'),
-	clear        = require('cli-clear'),
-	colors       = require('colors'),
-	inquirer     = require('inquirer'),
+// Gulp it down good sonny! Yeah, you like that don't you:
+//     gulp --silent
+//
+"use strict";
+var clear = require('cli-clear');
+clear();
+console.log('Please wait..');
+
+/**
+ * Required packages
+ */
+var autoprefixer = require('gulp-autoprefixer'),
+	bless        = require('gulp-bless'),
 	browserSync  = require('browser-sync').create(),
-	watch        = require('gulp-watch'),
-	gutil        = require('gulp-util'),
-	sourcemaps   = require('gulp-sourcemaps'),
-	sass         = require('gulp-sass'),
+	cleanCss     = require('gulp-clean-css'),
+	colors       = require('colors'),
 	compass      = require('compass-importer'),
 	concat       = require('gulp-concat'),
-	autoprefixer = require('gulp-autoprefixer'),
-	bless        = require('gulp-bless'),
-	cleanCss     = require('gulp-clean-css'),
-	size         = require('gulp-size'),
-	colors       = require('colors'),
-	uglify       = require('gulp-uglify'),
-	size         = require('gulp-size'),
-	override     = require('json-override'),
+	debug        = require('gulp-debug'),
+	filter       = require('gulp-filter'),
 	fs           = require('fs'),
-	lapisconfig  = require('./lapisconfig.json');
+	gulp         = require('gulp'),
+	gutil        = require('gulp-util'),
+	include      = require('gulp-include'),
+	inquirer     = require('inquirer'),
+	lapisconfig  = require('./lapisconfig.json'),
+	override     = require('json-override'),
+	sass         = require('gulp-sass'),
+	size         = require('gulp-size'),
+	sourcemaps   = require('gulp-sourcemaps'),
+	uglify       = require('gulp-uglify'),
+	watch        = require('gulp-watch');
 
 /**
  * Default modes, overrided by modes select
@@ -97,7 +106,8 @@ gulp.task('modes', () => {
  * Compile CSS
  */
 gulp.task('css', () => {
-	echoFill(" Event", 'blue', 'white', 'bold');
+	console.log('');
+	echoFill(' Change Event: Sass', 'magenta', 'white', 'bold');
 	var css = gulp.src(lapisconfig.css.src)
 		// Sourcemaps init
 		.pipe(modes.sourcemaps ? sourcemaps.init() : gutil.noop())
@@ -110,7 +120,7 @@ gulp.task('css', () => {
 			})
 			.on('error', sass.logError))
 
-		// Concat to filename
+		// Combine files together
 		.pipe(concat(lapisconfig.css.filename))
 
 		// Autoprefixer
@@ -155,11 +165,41 @@ gulp.task('css', () => {
 
 /**
  * Compile JS
- *
- * 'js' runs when 'modes' is completed
  */
 gulp.task('js', () => {
-	console.log(lapisconfig.js);
+	console.log('');
+	echoFill(' Change Event: JS', 'blue', 'white', 'bold');
+
+	var js = gulp.src(lapisconfig.js.src)
+		// Grab .js files
+		//.pipe(filter('*.js'))
+
+		// Allow //=include and //=require for .js files
+		.pipe(include({
+			debugIncludes: true
+		}))
+			.on('error', console.log)
+
+		// Combine files together
+		//.pipe(concat(lapisconfig.js.filename))
+
+		// Minify
+		.pipe(modes.minify ? uglify() : gutil.noop())
+
+		// Echo filesize for debugging
+		.pipe(size({
+			showFiles: true,
+			title: 'Output'
+		}));
+
+	// Save compiled file to each destination, whether single string or array
+	if (typeof lapisconfig.js.dest === 'string') {
+		js.pipe(gulp.dest(lapisconfig.js.dest));
+	} else {
+		for (var i = 0; i < lapisconfig.js.dest.length; i++) {
+			js.pipe(gulp.dest(lapisconfig.js.dest[i]));
+		}
+	}
 });
 
 /**
@@ -203,8 +243,6 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 		watches = watches.concat(lapisconfig.browserSync.watch);
 	}
 
-	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
-	console.log(watches);
 	browserSync.init({
 		proxy: lapisconfig.browserSync.proxy,
 		open: 'local',
@@ -212,6 +250,9 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 		logPrefix: "Browser-sync",
 		//injectChanges: false // Don't try to inject, just do a page refresh
 	});
+
+	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
+	console.log(watches);
 
 	echoFill('', 'green', 'white', 'bold');
 	echoFill(' Ready!', 'green', 'white', 'bold');
@@ -238,7 +279,7 @@ gulp.task('default', [
  //const lapisConfig = () => {
 function overrideLapisConfig() {
 	fs.stat('../../lapisconfig.json', function(err, stat) {
-		if (err === undefined) {
+		if (err === null) {
 			var lapisconfigOverrides = require('../../lapisconfig.json');
 			lapisconfig = override(lapisconfig, lapisconfigOverrides, true);
 			hasOverridenLapisConfig = true;
