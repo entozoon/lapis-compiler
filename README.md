@@ -9,5 +9,8 @@ A flexible frontend compiler.
 	npm install --save -g lapis-compiler
 
 ## Runnivisation
+	lapis
+
+#### Or, more manually:
 	cd node_modules/lapis-compiler
 	gulp --silent
