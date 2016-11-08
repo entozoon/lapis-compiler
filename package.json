@@ -1,6 +1,6 @@
 {
   "name": "lapis-compiler",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Gulp Sass Javascript Compiler",
   "main": "gulpfile.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/entozoon/lapis-compiler.git"
   },
   "bin": {
-    "lapis": "gulp --silent --gulpfile node_modules/lapis-compiler/gulpfile.js"
+    "lapis": "gulp --silent"
   },
   "keywords": [
     "gulp",
