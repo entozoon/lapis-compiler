@@ -32,7 +32,8 @@ var autoprefixer = require('gulp-autoprefixer'),
 	size         = require('gulp-size'),
 	sourcemaps   = require('gulp-sourcemaps'),
 	uglify       = require('gulp-uglify'),
-	watch        = require('gulp-watch');
+	watch        = require('gulp-watch'),
+	through      = require('through2')
 
 /**
  * Default modes, overrided by modes select
@@ -149,7 +150,8 @@ gulp.task('css', () => {
 		// Filesize output
 		.pipe(size({
 			showFiles: true,
-			title: 'Output'
+			title: 'Created',
+			pretty: true
 		}));
 
 	// Save compiled file to each destination, whether single string or array
@@ -185,11 +187,28 @@ gulp.task('js', () => {
 
 		// Minify
 		.pipe(modes.minify ? uglify() : gutil.noop())
+			.on('error', function(error) {
+				console.log('');
+				echoFill(' Error!', 'red', 'white', 'bold');
+				console.log('File:'.red);
+				console.log(error.fileName);
+				//console.log(error.cause.line); // this is the line number after concat so useless
+				console.log('Message:'.red);
+				console.log(error.cause.message);
+			})
 
 		// Echo filesize for debugging
 		.pipe(size({
 			showFiles: true,
-			title: 'Output'
+			title: 'Created',
+			pretty: true
+		}))
+
+		// 'Compiled' message
+		.pipe(through.obj((chunk, enc, cb) => {
+			echoFill(' Compiled', 'green', 'white', 'bold');
+			console.log('');
+			cb(null, chunk);
 		}));
 
 	// Save compiled file to each destination, whether single string or array
@@ -247,8 +266,10 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 		proxy: lapisconfig.browserSync.proxy,
 		open: 'local',
 		files: watches,
-		logPrefix: "Browser-sync",
-		//injectChanges: false // Don't try to inject, just do a page refresh
+		logLevel: "info",
+		//logFileChanges: false, // Stop file change message(?)
+		logPrefix: "Browser Sync Refresh",
+		//injectChanges: false // Don't try to inject, just do a page refresh(?)
 	});
 
 	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
