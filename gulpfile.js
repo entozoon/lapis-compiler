@@ -119,7 +119,15 @@ gulp.task('css', () => {
 				precision: 8,
 				importer: compass
 			})
-			.on('error', sass.logError))
+			.on('error', function(error) {
+				console.log('');
+				echoFill(' Error!', 'red', 'white', 'bold');
+				//sass.logError(error)
+				console.log('File:'.red);
+				console.log(error.relativePath + colourise(' - line' + ' ' + error.line, 'white'));
+				console.log('Message:'.red);
+				console.log(error.messageOriginal);
+			}))
 
 		// Combine files together
 		.pipe(concat(lapisconfig.css.filename))
@@ -152,6 +160,13 @@ gulp.task('css', () => {
 			showFiles: true,
 			title: 'Created',
 			pretty: true
+		}))
+
+		// 'Compiled' message
+		.pipe(through.obj((chunk, enc, cb) => {
+			echoFill(' Compiled', 'green', 'white', 'bold');
+			console.log('');
+			cb(null, chunk);
 		}));
 
 	// Save compiled file to each destination, whether single string or array
@@ -355,6 +370,7 @@ function fillColumns(string) {
 
 function colourise(string, fg, bg) {
 	// https://github.com/Marak/colors.js#colors-and-styles
+	if (bg == undefined) bg = null;
 	switch (fg) {
 		case 'black':
 			string = string.black;
@@ -408,6 +424,8 @@ function colourise(string, fg, bg) {
 			break;
 		case 'white':
 			string = string.bgWhite;
+			break;
+		default:
 			break;
 	}
 	return string;
