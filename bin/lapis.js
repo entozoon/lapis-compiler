@@ -15,8 +15,16 @@ function cd(dir) {
 	}
 }
 
-function exec(command, env) {
-  return execSyncPrintOutput(command, env);
+function exec(command, env) { // nee execSyncPrintOutput()
+  env = env || process.env;
+  try {
+    return require('child_process').execSync((command), {
+      stdio: 'inherit',
+      env: env
+    });
+  } catch (e) {
+    __handleExecFailure(command, e);
+  }
 }
 
 cd('node_modules/lapis-compiler');
