@@ -306,7 +306,6 @@ gulp.task('default', [
 	'nowMyWatchBegins',
 ]);
 
-
 /**
  * Load lapisconfig.json overrides file if exists in same directory as package.json
  *
@@ -328,7 +327,6 @@ function overrideLapisConfig() {
 	});
 	return null;
 }
-
 
 /**
  * Fill line with string
