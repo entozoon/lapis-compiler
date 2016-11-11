@@ -2,7 +2,7 @@
 A flexible frontend compiler.
 
 ## Installification
-[*Note: This currently has issues on windows, so use the alternative below*]
+[**Note: This currently has issues on windows, so use the alternative further below**]
 	yarn global add lapis-compiler
 
 #### Or, alternatifully
