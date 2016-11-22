@@ -33,7 +33,7 @@ var autoprefixer = require('gulp-autoprefixer'),
 	sourcemaps   = require('gulp-sourcemaps'),
 	uglify       = require('gulp-uglify'),
 	watch        = require('gulp-watch'),
-	through      = require('through2')
+	through      = require('through2');
 
 /**
  * Default modes, overrided by modes select
@@ -106,10 +106,15 @@ gulp.task('modes', () => {
 /**
  * Compile CSS
  */
+/*
 gulp.task('css', () => {
-	console.log('');
+	compileCSS();
+});
+*/
+function compileCSS(css) {
 	echoFill(' Change Event: Sass', 'magenta', 'white', 'bold');
-	var css = gulp.src(lapisconfig.css.src)
+
+	var compilation = gulp.src(css.src)
 		// Sourcemaps init
 		.pipe(modes.sourcemaps ? sourcemaps.init() : gutil.noop())
 
@@ -130,7 +135,7 @@ gulp.task('css', () => {
 			}))
 
 		// Combine files together
-		.pipe(concat(lapisconfig.css.filename))
+		.pipe(concat(css.filename))
 
 		// Autoprefixer
 		.pipe(autoprefixer({
@@ -170,15 +175,16 @@ gulp.task('css', () => {
 		}));
 
 	// Save compiled file to each destination, whether single string or array
-	if (typeof lapisconfig.css.dest === 'string') {
-		//console.log(process.cwd() + '/' + lapisconfig.css.dest + '/' + lapisconfig.css.filename);
-		css.pipe(gulp.dest(lapisconfig.css.dest));
+	if (typeof css.dest === 'string') {
+		//console.log(process.cwd() + '/' + css.dest + '/' + css.filename);
+		compilation.pipe(gulp.dest(css.dest));
 	} else {
-		for (var i = 0; i < lapisconfig.css.dest.length; i++) {
-			css.pipe(gulp.dest(lapisconfig.css.dest[i]));
+		for (var i = 0; i < css.dest.length; i++) {
+			compilation.pipe(gulp.dest(css.dest[i]));
 		}
 	}
-});
+
+}
 
 /**
  * Compile JS
@@ -262,6 +268,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	 * Watches array for browserSync
 	 * Combine given dest/filename values for css, js plus browserSync watch as extras.
 	 */
+	/*
 	let watches = [];
 	if (lapisconfig.css.dest !== undefined &&
 		lapisconfig.css.filename !== undefined) {
@@ -289,14 +296,34 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 
 	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
 	console.log(watches);
+	*/
 
 	echoFill('', 'green', 'white', 'bold');
 	echoFill(' Ready!', 'green', 'white', 'bold');
 	echoFill('', 'green', 'white', 'bold');
 
-	gulp.watch(lapisconfig.css.watch, ['css']);
+	//gulp.watch(lapisconfig.css.watch, ['css']);
+	/*
+	lapisconfig.css.forEach(function(css) {
+		gulp.watch(css, ['css']);
+	});
+	*/
+	for (var i = 0; i < lapisconfig.css.length; i++) {
+		setWatch(lapisconfig.css[i]);
+	}
 	gulp.watch(lapisconfig.js.watch, ['js']);
 });
+
+/**
+ * Change event watch
+ * Extracted out to a separate function
+ * to allow data to pass through to compileCSS
+ */
+function setWatch(css) {
+	gulp.watch(css.watch).on('change', function(f) {
+		compileCSS(css);
+	});
+}
 
 /**
  * Start 'config' task running, and subsequently, 'modes, 'css' and 'js'.
@@ -323,7 +350,7 @@ function overrideLapisConfig() {
 			hasOverridenLapisConfig = false;
 		}
 		// Change to given directory
-		process.chdir(lapisconfig.css.from);
+		process.chdir(lapisconfig.from);
 	});
 	return null;
 }

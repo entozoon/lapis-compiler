@@ -1,14 +1,16 @@
 {
-	"css": {
-		"from": "../../",
-		"watch": [
-			"src/scss/**/*.css",
-			"src/scss/**/*.scss"
-		],
-		"src": "src/scss/app.scss",
-		"dest": "./build/css",
-		"filename": "app.css"
-	},
+	"from": "../../",
+	"css": [
+		{
+			"watch": [
+				"src/scss/**/*.css",
+				"src/scss/**/*.scss"
+			],
+			"src": "src/scss/app.scss",
+			"dest": "./build/css",
+			"filename": "app.css"
+		}
+	],
 	"js": {
 		"from": "../../",
 		"watch": [
