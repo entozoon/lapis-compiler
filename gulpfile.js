@@ -189,11 +189,10 @@ function compileCSS(css) {
 /**
  * Compile JS
  */
-gulp.task('js', () => {
-	console.log('');
+function compileJS(js) {
 	echoFill(' Change Event: JS', 'blue', 'white', 'bold');
 
-	var js = gulp.src(lapisconfig.js.src)
+	var compilation = gulp.src(js.src)
 		// Grab .js files
 		//.pipe(filter('*.js'))
 
@@ -204,7 +203,7 @@ gulp.task('js', () => {
 			.on('error', console.log)
 
 		// Combine files together
-		//.pipe(concat(lapisconfig.js.filename))
+		//.pipe(concat(js.filename))
 
 		// Minify
 		.pipe(modes.minify ? uglify() : gutil.noop())
@@ -233,21 +232,22 @@ gulp.task('js', () => {
 		}));
 
 	// Save compiled file to each destination, whether single string or array
-	if (typeof lapisconfig.js.dest === 'string') {
-		js.pipe(gulp.dest(lapisconfig.js.dest));
+	if (typeof js.dest === 'string') {
+		compilation.pipe(gulp.dest(js.dest));
 	} else {
-		for (var i = 0; i < lapisconfig.js.dest.length; i++) {
-			js.pipe(gulp.dest(lapisconfig.js.dest[i]));
+		for (var i = 0; i < js.dest.length; i++) {
+			console.log(js.dest[i]);
+			compilation.pipe(gulp.dest(js.dest[i]));
 		}
 	}
-});
+}
 
 /**
  * Start all watch tasks when 'modes' is completed
  */
 gulp.task('nowMyWatchBegins', ['modes'], () => {
 	echoFill(' Config:', 'cyan', 'white', 'bold');
-	console.log(lapisconfig.css);
+	console.log(lapisconfig);
 	echoFill(' Modes:', 'cyan', 'white', 'bold');
 	console.log(modes);
 
@@ -257,7 +257,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 	if (modes.browserSync) {
 		if (lapisconfig.browserSync === undefined ||
 			lapisconfig.browserSync.proxy === undefined) {
-			echoFill(' Warning', 'red', 'white', 'bold');
+			echoFill(' Woah there!', 'red', 'white', 'bold');
 			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
 			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
 			return false;
@@ -308,10 +308,13 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 		gulp.watch(css, ['css']);
 	});
 	*/
-	for (var i = 0; i < lapisconfig.css.length; i++) {
-		setWatch(lapisconfig.css[i]);
+	for (let i = 0; i < lapisconfig.css.length; i++) {
+		setWatch(lapisconfig.css[i], compileCSS);
 	}
-	gulp.watch(lapisconfig.js.watch, ['js']);
+	//gulp.watch(lapisconfig.js.watch, ['js']);
+	for (let i = 0; i < lapisconfig.js.length; i++) {
+		setWatch(lapisconfig.js[i], compileJS);
+	}
 });
 
 /**
@@ -319,9 +322,9 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
  * Extracted out to a separate function
  * to allow data to pass through to compileCSS
  */
-function setWatch(css) {
-	gulp.watch(css.watch).on('change', function(f) {
-		compileCSS(css);
+function setWatch(target, compiler) {
+	gulp.watch(target.watch).on('change', function(f) {
+		compiler(target);
 	});
 }
 

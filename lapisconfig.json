@@ -11,13 +11,14 @@
 			"filename": "app.css"
 		}
 	],
-	"js": {
-		"from": "../../",
-		"watch": [
-			"src/js/**/*.js"
-		],
-		"src": "src/js/app.js",
-		"dest": "./build/js",
-		"filename": "app.js"
-	}
+	"js": [
+		{
+			"watch": [
+				"src/js/**/*.js"
+			],
+			"src": "src/js/app.js",
+			"dest": "./build/js",
+			"filename": "app.js"
+		}
+	]
 }
