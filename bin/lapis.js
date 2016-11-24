@@ -23,7 +23,9 @@ function exec(command, env) { // nee execSyncPrintOutput()
       env: env
     });
   } catch (e) {
-    __handleExecFailure(command, e);
+    console.log("Lapis Error!");
+    console.log(command);
+    console.log(e);
   }
 }
 

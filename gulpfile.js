@@ -262,41 +262,44 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
 			return false;
 		}
-	}
 
-	/**
-	 * Watches array for browserSync
-	 * Combine given dest/filename values for css, js plus browserSync watch as extras.
-	 */
-	/*
-	let watches = [];
-	if (lapisconfig.css.dest !== undefined &&
-		lapisconfig.css.filename !== undefined) {
-		watches = watches.concat(lapisconfig.css.dest + '/' + lapisconfig.css.filename);
-	}
-	if (lapisconfig.js.watch !== undefined &&
-		lapisconfig.js.filename !== undefined) {
-		watches = watches.concat(lapisconfig.js.dest + '/' +  lapisconfig.js.filename);
-	}
-	if (modes.browserSync &&
-		lapisconfig.browserSync !== undefined &&
-		lapisconfig.browserSync.watch !== undefined) {
-		watches = watches.concat(lapisconfig.browserSync.watch);
-	}
+		/**
+		 * Watches array for browserSync
+		 * (Watching compiled files)
+		 * Combine given dest/filename values for css, js plus browserSync watch as extras.
+		 */
+		let watches = [];
+		for (let i = 0; i < lapisconfig.css.length; i++) {
+			if (lapisconfig.css[i].dest !== undefined &&
+				lapisconfig.css[i].filename !== undefined) {
+				watches = watches.concat(lapisconfig.css[i].dest + '/' + lapisconfig.css[i].filename);
+			}
+		}
+		for (let i = 0; i < lapisconfig.js.length; i++) {
+			if (lapisconfig.js[i].dest !== undefined &&
+				lapisconfig.js[i].filename !== undefined) {
+				watches = watches.concat(lapisconfig.js[i].dest + '/' + lapisconfig.js[i].filename);
+			}
+		}
+		if (modes.browserSync &&
+			lapisconfig.browserSync !== undefined &&
+			lapisconfig.browserSync.watch !== undefined) {
+			watches = watches.concat(lapisconfig.browserSync.watch);
+		}
 
-	browserSync.init({
-		proxy: lapisconfig.browserSync.proxy,
-		open: 'local',
-		files: watches,
-		logLevel: "info",
-		//logFileChanges: false, // Stop file change message(?)
-		logPrefix: "Browser Sync Refresh",
-		//injectChanges: false // Don't try to inject, just do a page refresh(?)
-	});
+		browserSync.init({
+			proxy: lapisconfig.browserSync.proxy,
+			open: 'local',
+			files: watches,
+			logLevel: "info",
+			//logFileChanges: false, // Stop file change message(?)
+			logPrefix: "Browser Sync Refresh",
+			//injectChanges: false // Don't try to inject, just do a page refresh(?)
+		});
 
-	echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
-	console.log(watches);
-	*/
+		echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
+		console.log(watches);
+	}
 
 	echoFill('', 'green', 'white', 'bold');
 	echoFill(' Ready!', 'green', 'white', 'bold');
