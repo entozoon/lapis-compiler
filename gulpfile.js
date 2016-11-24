@@ -125,13 +125,13 @@ function compileCSS(css) {
 				importer: compass
 			})
 			.on('error', function(error) {
-				console.log('');
 				echoFill(' Error!', 'red', 'white', 'bold');
 				//sass.logError(error)
 				console.log('File:'.red);
 				console.log(error.relativePath + colourise(' - line' + ' ' + error.line, 'white'));
 				console.log('Message:'.red);
 				console.log(error.messageOriginal);
+				console.log('');
 			}))
 
 		// Combine files together
@@ -144,9 +144,18 @@ function compileCSS(css) {
 
 		// Bless (might not be wanted for unminified?)
 		.pipe(bless({
-			// Allow @import rules rather than splitting to separate files
-			imports: true
-		}))
+				// Allow @import rules rather than splitting to separate files
+				imports: true
+			})
+			.on('error', function(error) {
+				echoFill(' Error!', 'red', 'white', 'bold');
+				console.log('Message:'.red);
+				console.log(error.reason);
+				console.log('Snippet:'.red);
+				console.log(error.source.substring(0, 160));
+				console.log('');
+			})
+		)
 
 		// Minify
 		.pipe(modes.minify ? cleanCss({
@@ -208,13 +217,13 @@ function compileJS(js) {
 		// Minify
 		.pipe(modes.minify ? uglify() : gutil.noop())
 			.on('error', function(error) {
-				console.log('');
 				echoFill(' Error!', 'red', 'white', 'bold');
 				console.log('File:'.red);
 				console.log(error.fileName);
 				//console.log(error.cause.line); // this is the line number after concat so useless
 				console.log('Message:'.red);
 				console.log(error.cause.message);
+				console.log('');
 			})
 
 		// Echo filesize for debugging
