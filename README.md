@@ -18,3 +18,8 @@ A flexible frontend compiler.
 #### Or, more manually:
 	cd node_modules/lapis-compiler
 	gulp --silent
+
+## Updatabilitude
+	npm update -g lapis-compiler
+	npm update lapis-compiler
+	npm rebuild
