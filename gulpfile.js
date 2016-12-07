@@ -21,6 +21,7 @@ var autoprefixer = require('gulp-autoprefixer'),
 	concat       = require('gulp-concat'),
 	debug        = require('gulp-debug'),
 	filter       = require('gulp-filter'),
+	path         = require('path'),
 	fs           = require('fs'),
 	gulp         = require('gulp'),
 	gutil        = require('gulp-util'),
@@ -269,6 +270,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			echoFill(' Woah there!', 'red', 'white', 'bold');
 			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
 			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
+			console.log('PS: You can use "[currentdirectory]" to incorporate the folder name into the url');
 			return false;
 		}
 
@@ -366,7 +368,13 @@ function overrideLapisConfig() {
 		}
 		// Change to given directory
 		process.chdir(lapisconfig.from);
+
+		// Replace "[currentdirectory]" with folder name, if used.
+		let currentdirectory = process.cwd().split(path.sep).pop();
+		lapisconfig.browserSync.proxy = lapisconfig.browserSync.proxy
+		.replace(/\[currentdirectory\]/g, currentdirectory);
 	});
+
 	return null;
 }
 
