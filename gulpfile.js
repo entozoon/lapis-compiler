@@ -213,7 +213,7 @@ function compileJS(js) {
 			.on('error', console.log)
 
 		// Combine files together
-		//.pipe(concat(js.filename))
+		.pipe(concat(js.filename))
 
 		// Minify
 		.pipe(modes.minify ? uglify() : gutil.noop())
