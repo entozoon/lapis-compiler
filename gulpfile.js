@@ -73,6 +73,12 @@ gulp.task('modes', () => {
 				}
 			},
 			{
+				name: 'Unminified + browser-sync',
+				value: {
+					'browserSync': true
+				}
+			},
+			{
 				name: 'Minified',
 				value: {
 					'minify': true,
@@ -81,7 +87,7 @@ gulp.task('modes', () => {
 				}
 			},
 			{
-				name: 'Minified + browser-sync',
+				name: 'Minified   + browser-sync',
 				value: {
 					'minify': true,
 					'sassStyle': 'compressed',
@@ -90,7 +96,7 @@ gulp.task('modes', () => {
 				}
 			}
 		],
-		default: 2
+		default: 3
 	}];
 
 	return inquirer.prompt(question).then(answer => {
