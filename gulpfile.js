@@ -37,12 +37,13 @@ var autoprefixer = require('gulp-autoprefixer'),
 	through      = require('through2');
 
 /**
- * Default modes, overrided by modes select
+ * Default modes, overriden by modes select.
+ * Set in an 'everything off by default' style.
  */
 let modes = {
 	'minify': false,
 	'sassStyle': 'expanded',
-	'sourcemaps': true,
+	'sourcemaps': false,
 	'browserSync': false
 };
 
@@ -70,11 +71,13 @@ gulp.task('modes', () => {
 			{
 				name: 'Unminified',
 				value: {
+					'sourcemaps': true
 				}
 			},
 			{
 				name: 'Unminified + browser-sync',
 				value: {
+					'sourcemaps': true,
 					'browserSync': true
 				}
 			},
@@ -82,8 +85,7 @@ gulp.task('modes', () => {
 				name: 'Minified',
 				value: {
 					'minify': true,
-					'sassStyle': 'compressed',
-					'sourcemaps': false
+					'sassStyle': 'compressed'
 				}
 			},
 			{
@@ -91,7 +93,6 @@ gulp.task('modes', () => {
 				value: {
 					'minify': true,
 					'sassStyle': 'compressed',
-					'sourcemaps': false,
 					'browserSync': true
 				}
 			}
@@ -151,7 +152,8 @@ function compileCSS(css) {
 
 		// Bless (might not be wanted for unminified?)
 		.pipe(bless({
-				// Allow @import rules rather than splitting to separate files
+				// Allow @import rules within main compiled css file
+				// rather than just leaving as a bunch of unreferenced files
 				imports: true
 			})
 			.on('error', function(error) {
@@ -174,7 +176,7 @@ function compileCSS(css) {
 		}) : gutil.noop())
 
 		// Sourcemaps (inline)
-		.pipe(modes.sourcemaps ? gutil.noop() : sourcemaps.write())
+		.pipe(modes.sourcemaps ? sourcemaps.write() : gutil.noop())
 
 		// Filesize output
 		.pipe(size({
