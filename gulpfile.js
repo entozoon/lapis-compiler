@@ -44,7 +44,8 @@ let modes = {
 	'minify': false,
 	'sassStyle': 'expanded',
 	'sourcemaps': false,
-	'browserSync': false
+	'browserSync': false,
+	'bless': false
 };
 
 let hasOverridenLapisConfig = false;
@@ -71,21 +72,32 @@ gulp.task('modes', () => {
 			{
 				name: 'Unminified',
 				value: {
-					'sourcemaps': true
+					'sourcemaps': true,
+					'bless': true
 				}
 			},
 			{
 				name: 'Unminified + browser-sync',
 				value: {
 					'sourcemaps': true,
-					'browserSync': true
+					'browserSync': true,
+					'bless': true
+				}
+			},
+			{
+				name: 'Unminified + browser-sync - bless (debugging)',
+				value: {
+					'sourcemaps': true,
+					'browserSync': true,
+					'bless': false
 				}
 			},
 			{
 				name: 'Minified',
 				value: {
 					'minify': true,
-					'sassStyle': 'compressed'
+					'sassStyle': 'compressed',
+					'bless': true
 				}
 			},
 			{
@@ -93,11 +105,12 @@ gulp.task('modes', () => {
 				value: {
 					'minify': true,
 					'sassStyle': 'compressed',
-					'browserSync': true
+					'browserSync': true,
+					'bless': true
 				}
 			}
 		],
-		default: 3
+		default: 4
 	}];
 
 	return inquirer.prompt(question).then(answer => {
@@ -124,7 +137,9 @@ function compileCSS(css) {
 
 	var compilation = gulp.src(css.src)
 		// Sourcemaps init
-		.pipe(modes.sourcemaps ? sourcemaps.init() : gutil.noop())
+		.pipe(modes.sourcemaps ? sourcemaps.init({
+			//largeFile: true
+		}) : gutil.noop())
 
 		// Compile
 		.pipe(sass({
@@ -151,11 +166,11 @@ function compileCSS(css) {
 		}))
 
 		// Bless (might not be wanted for unminified?)
-		.pipe(bless({
-				// Allow @import rules within main compiled css file
-				// rather than just leaving as a bunch of unreferenced files
-				imports: true
-			})
+		.pipe(modes.bless ? bless({
+			// Allow @import rules within main compiled css file
+			// rather than just leaving as a bunch of unreferenced files
+			imports: true
+		}) : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error!', 'red', 'white', 'bold');
 				console.log('Message:'.red);
@@ -164,7 +179,6 @@ function compileCSS(css) {
 				console.log(error.source.substring(0, 160));
 				console.log('');
 			})
-		)
 
 		// Minify
 		.pipe(modes.minify ? cleanCss({
