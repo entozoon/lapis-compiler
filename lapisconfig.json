@@ -7,7 +7,7 @@
 				"src/scss/**/*.scss"
 			],
 			"src": "src/scss/app.scss",
-			"dest": "./build/css",
+			"dest": "./dist/css",
 			"filename": "app.css"
 		}
 	],
@@ -17,7 +17,7 @@
 				"src/js/**/*.js"
 			],
 			"src": "src/js/app.js",
-			"dest": "./build/js",
+			"dest": "./dist/js",
 			"filename": "app.js"
 		}
 	]
