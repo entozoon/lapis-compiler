@@ -32,6 +32,7 @@ var autoprefixer = require('gulp-autoprefixer'),
 	sass         = require('gulp-sass'),
 	size         = require('gulp-size'),
 	sourcemaps   = require('gulp-sourcemaps'),
+	babel        = require('gulp-babel'),
 	uglify       = require('gulp-uglify'),
 	watch        = require('gulp-watch'),
 	through      = require('through2');
@@ -45,7 +46,8 @@ let modes = {
 	'sassStyle': 'expanded',
 	'sourcemaps': false,
 	'browserSync': false,
-	'bless': false
+	'bless': false,
+	'convertES6': true
 };
 
 let hasOverridenLapisConfig = false;
@@ -238,6 +240,11 @@ function compileJS(js) {
 			debugIncludes: true
 		}))
 			.on('error', console.log)
+
+		// Convert ES6 to ES2015 for better compatibility
+		.pipe(modes.convertES6 ? babel({
+			presets: ['es2015']
+		}) : gutil.noop())
 
 		// Combine files together
 		.pipe(concat(js.filename))
