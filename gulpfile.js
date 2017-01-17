@@ -245,6 +245,14 @@ function compileJS(js) {
 		.pipe(modes.convertES6 ? babel({
 			presets: ['es2015']
 		}) : gutil.noop())
+			.on('error', function(error) {
+				echoFill(' Error!', 'red', 'white', 'bold');
+				console.log('Message:'.red);
+				console.log(error.message);
+				console.log('Snippet:'.red);
+				console.log(error.codeFrame);
+				console.log('');
+			})
 
 		// Combine files together
 		.pipe(concat(js.filename))
