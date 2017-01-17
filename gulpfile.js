@@ -169,7 +169,8 @@ function compileCSS(css) {
 		.pipe(modes.bless ? bless({
 			// Allow @import rules within main compiled css file
 			// rather than just leaving as a bunch of unreferenced files
-			imports: true
+			imports: true,
+			suffix: '-chunk'
 		}) : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error!', 'red', 'white', 'bold');
