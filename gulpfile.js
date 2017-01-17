@@ -186,7 +186,11 @@ function compileCSS(css) {
 			roundingPrecision: 4,
 			// Stop it from trying to minify files included by @import
 			// because bless (above) splits files into @imports and it breaks.
-			processImport: false
+			processImport: false,
+			// Remove any forced special comments that start /*! .. (e.g. bootstrap)
+			// Except for the very first one! e.g. company name..
+			keepSpecialComments: 1, // current clean-css
+			specialComments: 1 // clean-css v4 + (future proofing)
 		}) : gutil.noop())
 
 		// Sourcemaps (inline)
