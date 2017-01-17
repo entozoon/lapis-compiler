@@ -398,8 +398,11 @@ function overrideLapisConfig() {
 
 		// Replace "[currentdirectory]" with folder name, if used.
 		let currentdirectory = process.cwd().split(path.sep).pop();
-		lapisconfig.browserSync.proxy = lapisconfig.browserSync.proxy
-		.replace(/\[currentdirectory\]/g, currentdirectory);
+		if (lapisconfig.browserSync != null &&
+			lapisconfig.browserSync.proxy != null) {
+			lapisconfig.browserSync.proxy = lapisconfig.browserSync.proxy
+			.replace(/\[currentdirectory\]/g, currentdirectory);
+		}
 	});
 
 	return null;
