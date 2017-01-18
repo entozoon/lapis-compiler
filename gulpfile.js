@@ -46,6 +46,7 @@ let modes = {
 	'sassStyle': 'expanded',
 	'sourcemaps': false,
 	'browserSync': false,
+	'browserSyncTunnel': false,
 	'bless': false,
 	'convertES6': true
 };
@@ -87,7 +88,7 @@ gulp.task('modes', () => {
 				}
 			},
 			{
-				name: 'Unminified + browser-sync - bless (debugging)',
+				name: 'Unminified + browser-sync - bless chunks (debugging)',
 				value: {
 					'sourcemaps': true,
 					'browserSync': true,
@@ -110,9 +111,19 @@ gulp.task('modes', () => {
 					'browserSync': true,
 					'bless': true
 				}
+			},
+			{
+				name: 'Minified   + browser-sync + public tunnel',
+				value: {
+					'minify': true,
+					'sassStyle': 'compressed',
+					'browserSync': true,
+					'browserSyncTunnel': true,
+					'bless': true
+				}
 			}
 		],
-		default: 4
+		default: 3
 	}];
 
 	return inquirer.prompt(question).then(answer => {
@@ -339,8 +350,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			lapisconfig.browserSync.watch !== undefined) {
 			watches = watches.concat(lapisconfig.browserSync.watch);
 		}
-
-		browserSync.init({
+		var options = {
 			proxy: lapisconfig.browserSync.proxy,
 			open: 'local',
 			files: watches,
@@ -348,9 +358,28 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			//logFileChanges: false, // Stop file change message(?)
 			logPrefix: "Browser Sync Refresh",
 			//injectChanges: false // Don't try to inject, just do a page refresh(?)
-		});
+		};
+		/**
+		 * Set up a public tunnel if desired
+		 * Note: It's rather flakey at the moment - see issues reported:
+		 * https://github.com/BrowserSync/browser-sync/issues/1294
+		 * https://github.com/localtunnel/localtunnel/issues/156
+		 */
+		if (modes.browserSyncTunnel) {
+			options['open'] = 'tunnel';
+			options['tunnel'] = true;
+			options['https'] = false;
+			if (lapisconfig.browserSync.proxy != null) {
+				// Use a sanitised tunnel url if possible, e.g. sitenamedev.localtunnel.me
+				options['tunnel'] = lapisconfig.browserSync.proxy.replace(/\W/g, '').toLowerCase();
+			}
+		}
 
-		echoFill(' Watching (Browser Sync):', 'blue', 'white', 'bold');
+		echoFill(' Browser Sync Options:', 'cyan', 'white', 'bold');
+		console.log(options);
+		browserSync.init(options);
+
+		echoFill(' Browser Sync is now watching:', 'blue', 'white', 'bold');
 		console.log(watches);
 	}
 
