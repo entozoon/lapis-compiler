@@ -4,12 +4,9 @@ A flexible frontend compiler.
 ![Lapis Compiler](http://i.imgur.com/rs2QvnQ.png)
 
 ## Installification
-[*Note: This currently has issues on windows, so use the alternative below*]
-
 	yarn global add lapis-compiler
 
 #### Or, alternatifully
-
 	npm install --save -g lapis-compiler
 
 ## Runnivisation
