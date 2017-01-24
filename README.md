@@ -17,6 +17,9 @@ A flexible frontend compiler.
 	gulp --silent
 
 ## Updatabilitude
+	yarn upgrade lapis-compiler
+	
+#### Or again, more manually:
 	npm update -g lapis-compiler
 	npm update lapis-compiler
 	npm rebuild
