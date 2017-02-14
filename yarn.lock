@@ -841,7 +841,7 @@ chokidar@^1.6.1, chokidar@1.6.1:
   optionalDependencies:
     fsevents "^1.0.0"
 
-clean-css@^4.0.4:
+clean-css@^4.0.5:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.0.7.tgz#d8fa8b4d87a125f38fa3d64afc59abfc68ba7790"
   dependencies:
@@ -1747,13 +1747,12 @@ gulp-bless@^3.2.1:
     through2 "~0.5.1"
     vinyl-sourcemaps-apply "^0.2.1"
 
-gulp-clean-css@^2.0.13:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/gulp-clean-css/-/gulp-clean-css-2.4.0.tgz#2ae48109fe83ccc967ff5ad53c044949a4863b36"
+gulp-clean-css@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/gulp-clean-css/-/gulp-clean-css-3.0.2.tgz#2bec991df791efb7e178baf92e1b2a96877a1741"
   dependencies:
-    clean-css "^4.0.4"
+    clean-css "^4.0.5"
     gulp-util "^3.0.8"
-    object-assign "^4.1.1"
     through2 "^2.0.3"
     vinyl-sourcemaps-apply "^0.2.1"
 
@@ -2956,7 +2955,7 @@ object-assign@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-3.0.0.tgz#9bedd5ca0897949bca47e7ff408062d549f587f2"
 
-object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
+object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 

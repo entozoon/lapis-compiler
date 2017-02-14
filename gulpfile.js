@@ -186,7 +186,7 @@ function compileCSS(css) {
 			suffix: '-chunk'
 		}) : gutil.noop())
 			.on('error', function(error) {
-				echoFill(' Error!', 'red', 'white', 'bold');
+				echoFill(' Error (gulp-bless)!', 'red', 'white', 'bold');
 				console.log('Message:'.red);
 				console.log(error.reason);
 				console.log('Snippet:'.red);
@@ -206,6 +206,11 @@ function compileCSS(css) {
 			keepSpecialComments: 1, // current clean-css
 			specialComments: 1 // clean-css v4 + (future proofing)
 		}) : gutil.noop())
+			.on('error', function(error) {
+				echoFill(' Error (gulp-clean-css!', 'red', 'white', 'bold');
+				console.log('Message:'.red);
+				console.log(error);
+			})
 
 		// Sourcemaps (inline)
 		.pipe(modes.sourcemaps ? sourcemaps.write() : gutil.noop())
