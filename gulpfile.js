@@ -200,10 +200,12 @@ function compileCSS(css) {
 			roundingPrecision: 4,
 			// Stop it from trying to minify files included by @import
 			// because bless (above) splits files into @imports and it breaks.
-			processImport: false,
+			//processImport: false,
+			// Update, they've changed the above (see https://github.com/jakubpawlowicz/clean-css#inlining-options), so:
+			inline: ['none'],
 			// Remove any forced special comments that start /*! .. (e.g. bootstrap)
 			// Except for the very first one! e.g. company name..
-			keepSpecialComments: 1, // current clean-css
+			//keepSpecialComments: 1, // current clean-css
 			specialComments: 1 // clean-css v4 + (future proofing)
 		}) : gutil.noop())
 			.on('error', function(error) {
