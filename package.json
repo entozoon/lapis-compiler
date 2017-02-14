@@ -1,6 +1,6 @@
 {
   "name": "lapis-compiler",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Gulp Sass Javascript Compiler",
   "main": "gulpfile.js",
   "scripts": {
