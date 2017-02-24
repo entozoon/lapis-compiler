@@ -1,6 +1,6 @@
 {
   "name": "lapis-compiler",
-  "version": "1.5.7",
+  "version": "1.6.0",
   "description": "Gulp Sass Javascript Compiler",
   "main": "gulpfile.js",
   "scripts": {
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/entozoon/lapis-compiler#readme",
   "dependencies": {
     "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.23.0",
     "browser-sync": "^2.17.5",
     "cli-clear": "^1.0.4",
     "colors": "^1.1.2",
