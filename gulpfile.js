@@ -275,7 +275,7 @@ function compileJS(js) {
 
 		// Convert ES6 to ES2015 for better compatibility
 		.pipe(modesCurrent.convertES6 ? babel({
-			presets: ['es2015', 'react']
+			presets: ['env', 'react']
 		}) : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error!', 'red', 'white', 'bold');
