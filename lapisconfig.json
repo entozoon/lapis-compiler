@@ -8,7 +8,9 @@
 			],
 			"src": "src/scss/app.scss",
 			"dest": "./dist/css",
-			"filename": "app.css"
+			"filename": "app.css",
+			"modes": {
+			}
 		}
 	],
 	"js": [
@@ -18,7 +20,9 @@
 			],
 			"src": "src/js/app.js",
 			"dest": "./dist/js",
-			"filename": "app.js"
+			"filename": "app.js",
+			"modes": {
+			}
 		}
 	]
 }

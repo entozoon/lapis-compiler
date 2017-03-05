@@ -38,7 +38,7 @@ var autoprefixer = require('gulp-autoprefixer'),
 	through      = require('through2');
 
 /**
- * Default modes, overriden by modes select.
+ * Default modes, overriden by selecting options and any custom modes set in lapisconfig
  * Set in an 'everything off by default' style.
  */
 let modes = {
@@ -148,15 +148,22 @@ gulp.task('css', () => {
 function compileCSS(css) {
 	echoFill(' Change Event: Sass', 'magenta', 'white', 'bold');
 
+	// Create modes for this particular compilation from
+	// generic modes plus any custom lapisconfig ones.
+	var modesCurrent = modes;
+	if (css.modes != null) {
+		modesCurrent = override(modesCurrent, css.modes, true);
+	}
+
 	var compilation = gulp.src(css.src)
 		// Sourcemaps init
-		.pipe(modes.sourcemaps ? sourcemaps.init({
+		.pipe(modesCurrent.sourcemaps ? sourcemaps.init({
 			//largeFile: true
 		}) : gutil.noop())
 
 		// Compile
 		.pipe(sass({
-				outputStyle: modes.sassStyle,
+				outputStyle: modesCurrent.sassStyle,
 				precision: 8,
 				importer: compass
 			})
@@ -179,7 +186,7 @@ function compileCSS(css) {
 		}))
 
 		// Bless (might not be wanted for unminified?)
-		.pipe(modes.bless ? bless({
+		.pipe(modesCurrent.bless ? bless({
 			// Allow @import rules within main compiled css file
 			// rather than just leaving as a bunch of unreferenced files
 			imports: true,
@@ -195,7 +202,7 @@ function compileCSS(css) {
 			})
 
 		// Minify
-		.pipe(modes.minify ? cleanCss({
+		.pipe(modesCurrent.minify ? cleanCss({
 			advanced: false,
 			roundingPrecision: 4,
 			// Stop it from trying to minify files included by @import
@@ -215,7 +222,7 @@ function compileCSS(css) {
 			})
 
 		// Sourcemaps (inline)
-		.pipe(modes.sourcemaps ? sourcemaps.write() : gutil.noop())
+		.pipe(modesCurrent.sourcemaps ? sourcemaps.write() : gutil.noop())
 
 		// Filesize output
 		.pipe(size({
@@ -249,6 +256,13 @@ function compileCSS(css) {
 function compileJS(js) {
 	echoFill(' Change Event: JS', 'blue', 'white', 'bold');
 
+	// Create modes for this particular compilation from
+	// generic modes plus any custom lapisconfig ones.
+	var modesCurrent = modes;
+	if (js.modes != null) {
+		modesCurrent = override(modesCurrent, js.modes, true);
+	}
+
 	var compilation = gulp.src(js.src)
 		// Grab .js files
 		//.pipe(filter('*.js'))
@@ -260,7 +274,7 @@ function compileJS(js) {
 			.on('error', console.log)
 
 		// Convert ES6 to ES2015 for better compatibility
-		.pipe(modes.convertES6 ? babel({
+		.pipe(modesCurrent.convertES6 ? babel({
 			presets: ['es2015', 'react']
 		}) : gutil.noop())
 			.on('error', function(error) {
@@ -276,7 +290,7 @@ function compileJS(js) {
 		.pipe(concat(js.filename))
 
 		// Minify
-		.pipe(modes.minify ? uglify() : gutil.noop())
+		.pipe(modesCurrent.minify ? uglify() : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error!', 'red', 'white', 'bold');
 				console.log('File:'.red);
@@ -329,7 +343,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			lapisconfig.browserSync.proxy === undefined) {
 			echoFill(' Woah there!', 'red', 'white', 'bold');
 			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
-			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./dist/**/*"\n        ]\n    }\n}');
+			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
 			console.log('PS: You can use "[currentdirectory]" to incorporate the folder name into the url');
 			return false;
 		}
