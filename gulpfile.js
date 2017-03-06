@@ -39,7 +39,7 @@ var autoprefixer = require('gulp-autoprefixer'),
 
 /**
  * Default modes, overriden by selecting options and any custom modes set in lapisconfig
- * Set in an 'everything off by default' style.
+ * Set in an 'everything off by default' style, except JS babelling which is prudent.
  */
 let modes = {
 	'minify': false,
@@ -48,7 +48,8 @@ let modes = {
 	'browserSync': false,
 	'browserSyncTunnel': false,
 	'bless': false,
-	'convertES6': true
+	'convertES6': true,
+	'convertReact': true
 };
 
 let hasOverridenLapisConfig = false;
@@ -263,6 +264,15 @@ function compileJS(js) {
 		modesCurrent = override(modesCurrent, js.modes, true);
 	}
 
+	var babelPresets = [];
+	if (modesCurrent.convertES6) {
+		babelPresets.push('es2015');
+	}
+
+	if (modesCurrent.convertReact) {
+		babelPresets.push('react');
+	}
+
 	var compilation = gulp.src(js.src)
 		// Grab .js files
 		//.pipe(filter('*.js'))
@@ -273,9 +283,9 @@ function compileJS(js) {
 		}))
 			.on('error', console.log)
 
-		// Convert ES6 to ES2015 for better compatibility
-		.pipe(modesCurrent.convertES6 ? babel({
-			presets: ['es2015', 'react']
+		// Convert ES6/react/etc for better compatibility
+		.pipe(babelPresets.length ? babel({
+			presets: babelPresets
 		}) : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error!', 'red', 'white', 'bold');
