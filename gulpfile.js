@@ -359,7 +359,7 @@ gulp.task('nowMyWatchBegins', ['modes'], () => {
 			lapisconfig.browserSync.proxy === undefined) {
 			echoFill(' Woah there!', 'red', 'white', 'bold');
 			console.log(' Browser sync requires a proxy url, please add a section to your lapisconfig.json with proxy url and any extra files to watch for changes - similar to:');
-			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/img/**/*",\n        ]\n    }\n}');
+			console.log('{\n    "browserSync": {\n        "proxy": "sitename.dev",\n        "watch": [\n            "./build/**/*"\n        ]\n    }\n}');
 			console.log('PS: You can use "[currentdirectory]" to incorporate the folder name into the url');
 			return false;
 		}
