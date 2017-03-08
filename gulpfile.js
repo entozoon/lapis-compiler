@@ -27,7 +27,6 @@ var autoprefixer = require('gulp-autoprefixer'),
 	gutil        = require('gulp-util'),
 	include      = require('gulp-include'),
 	inquirer     = require('inquirer'),
-	lapisconfig  = require('./lapisconfig.json'),
 	override     = require('json-override'),
 	sass         = require('gulp-sass'),
 	size         = require('gulp-size'),
@@ -35,7 +34,9 @@ var autoprefixer = require('gulp-autoprefixer'),
 	babel        = require('gulp-babel'),
 	uglify       = require('gulp-uglify'),
 	watch        = require('gulp-watch'),
-	through      = require('through2');
+	through      = require('through2'),
+	lapisconfig  = require('./lapisconfig.json'),
+	packageJson  = require('./package.json');
 
 /**
  * Default modes, overriden by selecting options and any custom modes set in lapisconfig
@@ -60,7 +61,7 @@ overrideLapisConfig();
  */
 clear();
 echoFill('', 'cyan', 'white', 'bold');
-echoFill(' Lapis Compiler', 'cyan', 'white', 'bold');
+echoFill(' Lapis Compiler v' + packageJson.version, 'cyan', 'white', 'bold');
 echoFill('', 'cyan', 'white', 'bold');
 console.log('');
 
