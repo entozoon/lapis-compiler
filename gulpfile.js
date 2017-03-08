@@ -150,10 +150,28 @@ function compileCSS(css) {
 	echoFill(' Change Event: Sass', 'magenta', 'white', 'bold');
 
 	// Create modes for this particular compilation from
-	// generic modes plus any custom lapisconfig ones.
+	// generic modes plus any custom lapisconfig ones (additive override)
 	var modesCurrent = modes;
 	if (css.modes != null) {
 		modesCurrent = override(modesCurrent, css.modes, true);
+	}
+
+	// Create gulp-clean-css options similarly
+	var cleanCssOptions = {
+		advanced: false,
+		roundingPrecision: 4,
+		// Stop it from trying to minify files included by @import
+		// because bless (above) splits files into @imports and it breaks.
+		//processImport: false,
+		// Update, they've changed the above (see https://github.com/jakubpawlowicz/clean-css#inlining-options), so:
+		inline: ['none'],
+		// Remove any forced special comments that start /*! .. (e.g. bootstrap)
+		// Except for the very first one! e.g. company name..
+		//keepSpecialComments: 1, // current clean-css
+		specialComments: 1 // clean-css v4 + (future proofing)
+	};
+	if (css.cleanCssOptions != null) {
+		cleanCssOptions = override(cleanCssOptions, css.cleanCssOptions, true);
 	}
 
 	var compilation = gulp.src(css.src)
@@ -203,19 +221,7 @@ function compileCSS(css) {
 			})
 
 		// Minify
-		.pipe(modesCurrent.minify ? cleanCss({
-			advanced: false,
-			roundingPrecision: 4,
-			// Stop it from trying to minify files included by @import
-			// because bless (above) splits files into @imports and it breaks.
-			//processImport: false,
-			// Update, they've changed the above (see https://github.com/jakubpawlowicz/clean-css#inlining-options), so:
-			inline: ['none'],
-			// Remove any forced special comments that start /*! .. (e.g. bootstrap)
-			// Except for the very first one! e.g. company name..
-			//keepSpecialComments: 1, // current clean-css
-			specialComments: 1 // clean-css v4 + (future proofing)
-		}) : gutil.noop())
+		.pipe(modesCurrent.minify ? cleanCss(cleanCssOptions) : gutil.noop())
 			.on('error', function(error) {
 				echoFill(' Error (gulp-clean-css!', 'red', 'white', 'bold');
 				console.log('Message:'.red);

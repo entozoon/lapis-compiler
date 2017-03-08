@@ -10,6 +10,8 @@
 			"dest": "./dist/css",
 			"filename": "app.css",
 			"modes": {
+			},
+			"cleanCssOptions": {
 			}
 		}
 	],
