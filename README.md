@@ -1,4 +1,7 @@
 # Lapis Gulp Sass Javascript Compiler
+
+PLEASE DON'T USE THIS: Well, you can. I'm sure it still works fine but it was built before Webpack 2 was a thing and is wholly unmaintained. (i.e. use Webpack)
+
 A flexible frontend compiler.
 
 ![Lapis Compiler](http://i.imgur.com/rs2QvnQ.png)
