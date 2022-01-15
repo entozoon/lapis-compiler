@@ -50,6 +50,6 @@
     "gulp-watch": "^4.3.10",
     "inquirer": "^1.2.2",
     "json-override": "^0.2.0",
-    "shelljs": "^0.7.5"
+    "shelljs": "^0.8.5"
   }
 }
